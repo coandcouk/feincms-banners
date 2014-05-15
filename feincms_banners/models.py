@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from feincms.module.medialibrary.fields import MediaFileForeignKey
 from feincms.module.medialibrary.models import MediaFile
+import re
 
 
 def generate_key():
@@ -88,11 +89,17 @@ class Banner(models.Model):
         return ('banner_impression', (), {'code': self.code})
 
     def click(self, request):
-        self.clicks.create(
-            ip=request.META.get('REMOTE_ADDR'),
-            user_agent=request.META.get('HTTP_USER_AGENT', ''),
-            referrer=request.META.get('HTTP_REFERER', ''),
-        )
+        from ua_parser import user_agent_parser
+        user_agent_string = request.META.get('HTTP_USER_AGENT')
+        result_dict = user_agent_parser.Parse(user_agent_string)
+        print 'device family' + str(result_dict['device'])
+
+        if result_dict['device']['family'] != 'Spider':
+            self.clicks.create(
+				ip=request.META.get('REMOTE_ADDR'),
+				user_agent=request.META.get('HTTP_USER_AGENT', ''),
+				referrer=request.META.get('HTTP_REFERER', ''),
+			)
 
     def click_count(self):
         return self.clicks.count()
