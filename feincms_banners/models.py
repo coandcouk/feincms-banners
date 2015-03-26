@@ -6,6 +6,8 @@ from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.sites.models import Site
+
 
 from feincms.module.medialibrary.fields import MediaFileForeignKey
 from feincms.module.medialibrary.models import MediaFile
@@ -42,6 +44,15 @@ class Banner(models.Model):
         (BOX, _('box')),
     )
 
+
+    TARGET_SELF = '_self'
+    TARGET_BLANK = '_blank'
+
+    TARGET_CHOICES = (
+        (TARGET_SELF, _('self')),
+        (TARGET_BLANK, _('blank'))
+    )
+
     is_active = models.BooleanField(_('is active'), default=True)
     name = models.CharField(
         _('name'), max_length=100, help_text=_(
@@ -69,6 +80,9 @@ class Banner(models.Model):
             ' a Javascript callback, verifying that it actually was a'
             ' browser? (Too low because of network issues and deactivated'
             ' Javascript support in some browsers.)'))
+
+    sites = models.ManyToManyField(Site, verbose_name=_('Site'))
+    target = models.CharField(_('target'), max_length=20, choices=TARGET_CHOICES, default=TARGET_SELF)
 
     objects = BannerManager()
 
