@@ -6,4 +6,5 @@ dist
 .coverage
 venv
 /tests/media
-.*.idea
+/.idea
+/feincms_banners/.idea

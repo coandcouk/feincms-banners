@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from feincms_banners.models import Banner
 
 from feincms.admin.item_editor import FeinCMSInline
-
+from django.contrib.sites.models import get_current_site
 
 class BannerContentInline(FeinCMSInline):
     raw_id_fields = ('specific',)
@@ -34,7 +34,14 @@ class BannerContent(models.Model):
         verbose_name_plural = _('banners')
 
     def render(self, **kwargs):
+
         if self.specific:
+            request = kwargs['request']
+            current_site = get_current_site(request)
+            allowed_sites =  self.specific.sites()
+            if len(allowed_sites) > 0 and  current_site not in allowed_sites:
+                return ''
+
             specific_is_active = (
                 self.specific.is_active
                 and self.specific.active_from <= timezone.now()
