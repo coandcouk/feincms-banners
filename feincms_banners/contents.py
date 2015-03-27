@@ -38,7 +38,7 @@ class BannerContent(models.Model):
         if self.specific:
             request = kwargs['request']
             current_site = get_current_site(request)
-            allowed_sites =  self.specific.sites()
+            allowed_sites =  self.specific.sites.all()
             if len(allowed_sites) > 0 and  current_site not in allowed_sites:
                 return ''
 
