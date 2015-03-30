@@ -82,7 +82,7 @@ class Banner(models.Model):
             ' Javascript support in some browsers.)'))
 
     sites = models.ManyToManyField(Site, verbose_name=_('Site'), blank=True, null=True)
-    target = models.CharField(_('target'), max_length=20, choices=TARGET_CHOICES, default=TARGET_SELF)
+    target = models.CharField(_('target'), max_length=20, choices=TARGET_CHOICES, default=TARGET_BLANK)
 
     objects = BannerManager()
 

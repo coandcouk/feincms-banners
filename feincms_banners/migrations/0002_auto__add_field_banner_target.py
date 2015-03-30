@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'Banner.target'
         db.add_column('feincms_banners_banner', 'target',
-                      self.gf('django.db.models.fields.CharField')(default=u'_self', max_length=20),
+                      self.gf('django.db.models.fields.CharField')(default=u'_blank', max_length=20),
                       keep_default=False)
 
         # Adding M2M table for field sites on 'Banner'
@@ -35,15 +35,15 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "[u'-active_from']", 'object_name': 'Banner'},
             'active_from': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'active_until': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'code': ('django.db.models.fields.CharField', [], {'default': "u'y3sipef80nw4r3x75giazkwjk4d-8czudqjdp9nk'", 'unique': 'True', 'max_length': '40'}),
+            'code': ('django.db.models.fields.CharField', [], {'default': "u'ot86fz4nqntw7ef4jltz0ugyry1nr7rt0_sz_0wm'", 'unique': 'True', 'max_length': '40'}),
             'embeds': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'impressions': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'mediafile': ('feincms.module.medialibrary.fields.MediaFileForeignKey', [], {'to': "orm['medialibrary.MediaFile']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['sites.Site']", 'symmetrical': 'False'}),
-            'target': ('django.db.models.fields.CharField', [], {'default': "u'_self'", 'max_length': '20'}),
+            'sites': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['sites.Site']", 'null': 'True', 'blank': 'True'}),
+            'target': ('django.db.models.fields.CharField', [], {'default': "u'_blank'", 'max_length': '20'}),
             'type': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200'})
         },
