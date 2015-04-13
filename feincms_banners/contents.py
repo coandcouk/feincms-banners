@@ -35,9 +35,10 @@ class BannerContent(models.Model):
 
     def render(self, **kwargs):
 
+        request = kwargs['request']
+        current_site = get_current_site(request)
+
         if self.specific:
-            request = kwargs['request']
-            current_site = get_current_site(request)
             allowed_sites =  self.specific.sites.all()
             if len(allowed_sites) > 0 and  current_site not in allowed_sites:
                 return ''
@@ -56,13 +57,18 @@ class BannerContent(models.Model):
             else:
                 return ''
         else:
-            try:
-                banner = Banner.objects.active().filter(
-                    type=self.type,
-                ).select_related('mediafile').order_by('?')[0]
-                type = self.type
-            except IndexError:
+            valid_banner = None
+            possible_banners = Banner.objects.active().filter(
+                type=self.type,
+                ).select_related('mediafile').order_by('?')
+            for banner in possible_banners:
+                if banner.allowed_for_site(current_site):
+                    valid_banner = banner
+                    break
+
+            if not valid_banner:
                 return ''
+            type = self.type
 
         Banner.objects.filter(id=banner.id).update(embeds=F('embeds') + 1)
 
@@ -73,3 +79,4 @@ class BannerContent(models.Model):
             ],
             {'content': self, 'banner': banner},
             context_instance=kwargs.get('context'))
+

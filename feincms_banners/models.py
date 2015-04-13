@@ -119,6 +119,12 @@ class Banner(models.Model):
         return self.clicks.count()
     click_count.short_description = _('click count')
 
+    def allowed_for_site(self, site):
+        if len(self.sites.all()) == 0 or site in self.sites.all():
+            return True
+        return False
+
+
 
 class Click(models.Model):
     banner = models.ForeignKey(
@@ -132,3 +138,4 @@ class Click(models.Model):
         ordering = ['-timestamp']
         verbose_name = _('click')
         verbose_name_plural = _('clicks')
+
