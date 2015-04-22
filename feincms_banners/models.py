@@ -37,11 +37,13 @@ class Banner(models.Model):
     SKYSCRAPER = 'skyscraper'
     LEADERBOARD = 'leaderboard'
     BOX = 'box'
+    TOP_BANNER = 'topbanner'
 
     TYPE_CHOICES = (
         (SKYSCRAPER, _('skyscraper')),
         (LEADERBOARD, _('leaderboard')),
         (BOX, _('box')),
+        (TOP_BANNER, _('Top Banner'))
     )
 
 
